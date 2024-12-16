@@ -26,6 +26,15 @@ router.addRoute("/404", () => {
   document.body.innerHTML = ErrorPage();
 });
 
+document.addEventListener("click", (e) => {
+  const path = e.target.closest("[data-link]");
+  if (path) {
+    e.preventDefault();
+    // 페이지 이동하기
+    router.navigateToRoute(path.getAttribute("href"));
+  }
+});
+
 router.handleRoute(window.location.pathname);
 
 // const MainPage = () => `

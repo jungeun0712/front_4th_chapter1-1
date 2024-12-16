@@ -1,9 +1,9 @@
 export class Router {
   constructor() {
     this.routes = {};
-    window.addEventListener("DOMContentLoaded", () => {
-      this.handleRoute(window.location.pathname);
-    });
+    // window.addEventListener("DOMContentLoaded", () => {
+    //   this.handleRoute(window.location.pathname);
+    // });
     window.addEventListener("popstate", () => {
       this.handleRoute(window.location.pathname);
     });
