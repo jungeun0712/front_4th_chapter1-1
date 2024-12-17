@@ -11,7 +11,7 @@ export class Router {
   addRoute(path, handler) {
     this.routes[path] = handler;
   }
-  navigateToRoute(path) {
+  navigateTo(path) {
     history.pushState(null, "", path);
     this.handleRoute(path);
   }
@@ -20,7 +20,18 @@ export class Router {
     if (handler) {
       handler();
     } else {
-      this.navigateToRoute("/404");
+      this.navigateTo("/404");
+    }
+
+    const nav = document.querySelector("nav");
+    // 주소값이 다르다..
+    if (nav) {
+      nav.addEventListener("click", (e) => {
+        if (e.target.tagName === "A") {
+          e.preventDefault();
+          this.navigateTo(e.target.pathname);
+        }
+      });
     }
   }
 }
