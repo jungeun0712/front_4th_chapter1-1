@@ -7,6 +7,9 @@ import { ErrorPage } from "./error.js";
 
 const router = new Router();
 let isLogin = !!JSON.parse(localStorage.getItem("user"));
+
+const root = document.getElementById("root");
+
 export const HomePage = () => `
 	<div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
@@ -109,7 +112,7 @@ export const HomePage = () => `
 
 // Main Page
 router.addRoute("/", () => {
-  document.body.innerHTML = HomePage();
+  root.innerHTML = HomePage();
 
   const login = document.querySelector("#login-link");
   if (login) {
@@ -125,7 +128,7 @@ router.addRoute("/", () => {
 
 // Login Page
 router.addRoute("/login", () => {
-  document.body.innerHTML = LoginPage();
+  root.innerHTML = LoginPage();
 
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
@@ -153,7 +156,7 @@ router.addRoute("/profile", () => {
     return;
   }
 
-  document.body.innerHTML = ProfilePage(isLogin);
+  root.innerHTML = ProfilePage(isLogin);
   const form = document.querySelector("form");
   const username = document.getElementById("username");
   const email = document.getElementById("email");
@@ -183,7 +186,7 @@ router.addRoute("/profile", () => {
 
 // 404 Page
 router.addRoute("/404", () => {
-  document.body.innerHTML = ErrorPage();
+  root.innerHTML = ErrorPage();
 });
 
 function logout() {

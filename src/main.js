@@ -4,6 +4,6 @@ import { HomePage } from "./page/home.js";
 // import { ErrorPage } from "./page/error.js";
 // import { Router } from "./router/router.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  HomePage();
-});
+HomePage();
+// document.addEventListener("DOMContentLoaded", () => {
+// });
