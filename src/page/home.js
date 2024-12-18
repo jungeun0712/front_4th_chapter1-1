@@ -1,9 +1,7 @@
 import { Header } from "../util/header.js";
 import { Footer } from "../util/footer.js";
 
-let isLogin = !!JSON.parse(localStorage.getItem("user"));
-
-export const HomePage = () => `
+export const HomePage = (isLogin) => `
 	<div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
       ${Header(isLogin)}
