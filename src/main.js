@@ -3,15 +3,14 @@ import { Router } from "./router/router.js";
 import { LoginPage } from "./page/login.js";
 import { ProfilePage } from "./page/profile.js";
 import { ErrorPage } from "./page/error.js";
+import { State } from "./store/state.js";
 
 const router = new Router();
-let isLogin = !!JSON.parse(localStorage.getItem("user"));
+const state = new State();
 
 const root = document.getElementById("root");
 
 HomePage();
-// document.addEventListener("DOMContentLoaded", () => {
-// });
 router.addRoute("/", () => {
   root.innerHTML = HomePage();
 
@@ -30,38 +29,38 @@ router.addRoute("/", () => {
 // Login Page
 router.addRoute("/login", () => {
   root.innerHTML = LoginPage();
-
+  const user = state.getState();
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
     const username = document.getElementById("username");
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          username: username.value,
-          email: "",
-          bio: "",
-        }),
-      );
-      isLogin = true;
+
+      const user = {
+        username: username.value,
+        email: "",
+        bio: "",
+      };
+      state.setState(user);
+
       router.navigateTo("/profile");
     });
   }
 
-  if (isLogin) {
+  if (user) {
     router.navigateTo("/");
   }
 });
 
 router.addRoute("/profile", () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = state.getState();
+
   if (!user) {
     router.navigateTo("/login");
     return;
   }
 
-  root.innerHTML = ProfilePage(isLogin);
+  root.innerHTML = ProfilePage(user);
 
   const form = document.querySelector("form");
   const username = document.getElementById("username");
@@ -70,18 +69,17 @@ router.addRoute("/profile", () => {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        username: username.value,
-        email: email.value,
-        bio: bio.value,
-      }),
-    );
+
+    const userUpdate = {
+      username: username.value,
+      email: email.value,
+      bio: bio.value,
+    };
+    state.setState(userUpdate);
+
     router.navigateTo("/profile");
     alert("프로필이 업데이트되었습니다.");
   });
-
   username.value = user.username || "";
   email.value = user.email || "";
   bio.value = user.bio || "";
@@ -99,8 +97,7 @@ function logout() {
   document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "logout") {
       e.preventDefault();
-      localStorage.clear();
-      isLogin = false;
+      state.deleteState();
       router.navigateTo("/login");
     }
   });

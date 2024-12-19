@@ -4,9 +4,11 @@ import { HomePage } from "./page/home.js";
 import { LoginPage } from "./page/login.js";
 import { ProfilePage } from "./page/profile.js";
 import { HashRouter } from "./router/router.js";
+import { State } from "./store/state.js";
 
 const hashRouter = new HashRouter();
-let isLogin = !!JSON.parse(localStorage.getItem("user"));
+const state = new State();
+
 const root = document.getElementById("root");
 
 // 처음 들어왔을때 url에 해시가 없으면 해시 추가해주기
@@ -33,39 +35,37 @@ hashRouter.addRoute("/", () => {
 // Login Page
 hashRouter.addRoute("/login", () => {
   root.innerHTML = LoginPage();
-
+  const user = state.getState();
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
     const username = document.getElementById("username");
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          username: username.value,
-          email: "",
-          bio: "",
-        }),
-      );
-      isLogin = true;
+      const user = {
+        username: username.value,
+        email: "",
+        bio: "",
+      };
+      state.setState(user);
       hashRouter.navigateTo("/profile");
     });
   }
 
-  if (isLogin) {
+  if (user) {
     hashRouter.navigateTo("/");
   }
 });
 
 // Profile Page
 hashRouter.addRoute("/profile", () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = state.getState();
+
   if (!user) {
     hashRouter.navigateTo("/login");
     return;
   }
 
-  root.innerHTML = ProfilePage(isLogin);
+  root.innerHTML = ProfilePage(user);
 
   const form = document.querySelector("form");
   const username = document.getElementById("username");
@@ -74,14 +74,14 @@ hashRouter.addRoute("/profile", () => {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        username: username.value,
-        email: email.value,
-        bio: bio.value,
-      }),
-    );
+
+    const userUpdate = {
+      username: username.value,
+      email: email.value,
+      bio: bio.value,
+    };
+    state.setState(userUpdate);
+
     hashRouter.navigateTo("/profile");
     alert("프로필이 업데이트되었습니다.");
   });
@@ -103,8 +103,7 @@ function logout() {
   document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "logout") {
       e.preventDefault();
-      localStorage.clear();
-      isLogin = false;
+      state.deleteState();
       hashRouter.navigateTo("/login");
     }
   });

@@ -1,6 +1,9 @@
+import { State } from "../store/state";
+
 export const Header = () => {
   const currentPath = window.location.pathname;
-  let isLogin = !!JSON.parse(localStorage.getItem("user"));
+  const state = new State();
+  let isLogin = !!state.getState();
   return `
 		<header class="bg-blue-600 text-white p-4 sticky top-0">
 			<h1 class="text-2xl font-bold">항해플러스</h1>
