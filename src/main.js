@@ -3,10 +3,10 @@ import { Router } from "./router/router.js";
 import { LoginPage } from "./page/login.js";
 import { ProfilePage } from "./page/profile.js";
 import { ErrorPage } from "./page/error.js";
-import { State } from "./store/state.js";
+import { Store } from "./store/store.js";
 
 const router = new Router();
-const state = new State();
+const store = new Store();
 
 const root = document.getElementById("root");
 
@@ -29,7 +29,7 @@ router.addRoute("/", () => {
 // Login Page
 router.addRoute("/login", () => {
   root.innerHTML = LoginPage();
-  const user = state.getState();
+  const user = store.getState();
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
     const username = document.getElementById("username");
@@ -41,7 +41,7 @@ router.addRoute("/login", () => {
         email: "",
         bio: "",
       };
-      state.setState(user);
+      store.setState(user);
 
       router.navigateTo("/profile");
     });
@@ -53,7 +53,7 @@ router.addRoute("/login", () => {
 });
 
 router.addRoute("/profile", () => {
-  const user = state.getState();
+  const user = store.getState();
 
   if (!user) {
     router.navigateTo("/login");
@@ -75,7 +75,7 @@ router.addRoute("/profile", () => {
       email: email.value,
       bio: bio.value,
     };
-    state.setState(userUpdate);
+    store.setState(userUpdate);
 
     router.navigateTo("/profile");
     alert("프로필이 업데이트되었습니다.");
@@ -97,7 +97,7 @@ function logout() {
   document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "logout") {
       e.preventDefault();
-      state.deleteState();
+      store.deleteState();
       router.navigateTo("/login");
     }
   });

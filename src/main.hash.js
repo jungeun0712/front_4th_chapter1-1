@@ -4,10 +4,10 @@ import { HomePage } from "./page/home.js";
 import { LoginPage } from "./page/login.js";
 import { ProfilePage } from "./page/profile.js";
 import { HashRouter } from "./router/router.js";
-import { State } from "./store/state.js";
+import { Store } from "./store/store.js";
 
 const hashRouter = new HashRouter();
-const state = new State();
+const store = new Store();
 
 const root = document.getElementById("root");
 
@@ -35,7 +35,7 @@ hashRouter.addRoute("/", () => {
 // Login Page
 hashRouter.addRoute("/login", () => {
   root.innerHTML = LoginPage();
-  const user = state.getState();
+  const user = store.getState();
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
     const username = document.getElementById("username");
@@ -46,7 +46,7 @@ hashRouter.addRoute("/login", () => {
         email: "",
         bio: "",
       };
-      state.setState(user);
+      store.setState(user);
       hashRouter.navigateTo("/profile");
     });
   }
@@ -58,7 +58,7 @@ hashRouter.addRoute("/login", () => {
 
 // Profile Page
 hashRouter.addRoute("/profile", () => {
-  const user = state.getState();
+  const user = store.getState();
 
   if (!user) {
     hashRouter.navigateTo("/login");
@@ -80,7 +80,7 @@ hashRouter.addRoute("/profile", () => {
       email: email.value,
       bio: bio.value,
     };
-    state.setState(userUpdate);
+    store.setState(userUpdate);
 
     hashRouter.navigateTo("/profile");
     alert("프로필이 업데이트되었습니다.");
@@ -103,7 +103,7 @@ function logout() {
   document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "logout") {
       e.preventDefault();
-      state.deleteState();
+      store.deleteState();
       hashRouter.navigateTo("/login");
     }
   });

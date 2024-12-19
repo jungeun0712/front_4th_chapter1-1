@@ -1,4 +1,4 @@
-export class State {
+export class Store {
   constructor() {
     this.user = null;
   }
