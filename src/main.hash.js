@@ -20,6 +20,7 @@ hashRouter.addRoute("/", () => {
   root.innerHTML = HomePage();
 
   const login = document.querySelector("#login-link");
+  console.log(login);
   if (login) {
     login.addEventListener("click", (e) => {
       e.preventDefault();
@@ -100,13 +101,14 @@ hashRouter.addRoute("/404", () => {
 });
 
 function logout() {
-  document.addEventListener("click", (e) => {
-    if (e.target && e.target.id === "logout") {
+  const logoutButton = document.getElementById("logout");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", (e) => {
       e.preventDefault();
       store.deleteState();
-      hashRouter.navigateTo("/login");
-    }
-  });
+      // hashRouter.navigateTo("/login");
+    });
+  }
 }
 
 // 현재 url 라우팅 처리하기

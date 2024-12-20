@@ -21,12 +21,16 @@ export class Router {
     }
 
     const nav = document.querySelector("nav");
-    // 주소값이 다르다..
     if (nav) {
       nav.addEventListener("click", (e) => {
         if (e.target.tagName === "A") {
           e.preventDefault();
-          this.navigateTo(e.target.pathname);
+          const href = e.target.getAttribute("href");
+          if (href === "#") {
+            this.navigateTo("/login");
+          } else {
+            this.navigateTo(e.target.pathname);
+          }
         }
       });
     }
@@ -50,8 +54,10 @@ export class HashRouter {
     this.handleRoute(hashUrl);
   }
   handleRoute(path) {
+    console.log(path);
     const urlRoute = path.split("#")[1] || "";
     const handler = this.routes[urlRoute];
+    console.log(handler);
     if (handler) {
       handler();
     } else {
@@ -63,7 +69,13 @@ export class HashRouter {
       nav.addEventListener("click", (e) => {
         if (e.target.tagName === "A") {
           e.preventDefault();
-          this.navigateTo(e.target.pathname);
+          const href = e.target.getAttribute("href");
+          console.log(href);
+          if (href === "#") {
+            this.navigateTo("/login");
+          } else {
+            this.navigateTo(e.target.pathname);
+          }
         }
       });
     }

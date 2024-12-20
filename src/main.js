@@ -14,7 +14,7 @@ HomePage();
 router.addRoute("/", () => {
   root.innerHTML = HomePage();
 
-  const login = document.querySelector("#login-link");
+  const login = document.getElementById("login-link");
   if (login) {
     login.addEventListener("click", (e) => {
       e.preventDefault();
@@ -94,13 +94,21 @@ router.addRoute("/404", () => {
 });
 
 function logout() {
-  document.addEventListener("click", (e) => {
-    if (e.target && e.target.id === "logout") {
+  const logoutButton = document.getElementById("logout");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", (e) => {
       e.preventDefault();
       store.deleteState();
-      router.navigateTo("/login");
-    }
-  });
+      // router.navigateTo("/login");
+    });
+  }
+  // document.addEventListener("click", (e) => {
+  //   if (e.target && e.target.id === "logout") {
+  //     e.preventDefault();
+  //     store.deleteState();
+  //     router.navigateTo("/login");
+  //   }
+  // });
 }
 
 router.handleRoute(window.location.pathname);
